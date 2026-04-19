@@ -11,7 +11,7 @@ if cfg.passes.flatten  then passes[#passes+1] = require("passes.flatten")  end
 -- deadcode is handled inside emitter, not as an AST pass --
 
 return function(source)
-    local passes_count = math.min(cfg.max_passes, 2)
+    local passes_count = math.min(cfg.max_passes, 2) -- you can change the passes here 1 to 2 I'd recommend 2 don't freaking make it 3 Obfuscated code might not work due to StackOverFlow C or something.
     local current = source
 
     for i = 1, passes_count do
