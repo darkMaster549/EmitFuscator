@@ -1,4 +1,3 @@
--- this adding useless deadcode --
 local cfg = require("config")
 
 local function trueCmp()
