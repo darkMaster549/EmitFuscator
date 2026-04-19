@@ -15,4 +15,4 @@ EmitFuscator is an **SIMPLE** **AST-based obfuscator** combined with a **VM runt
 
 ## Usage
 ```bash
-lua main.lua input.lua
+lua main.lua Output/test.lua
