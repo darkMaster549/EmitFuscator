@@ -1,4 +1,3 @@
--- based on luaobfuscator.com --
 return function()
     return table.concat({
         "local v0=tostring;",
