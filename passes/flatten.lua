@@ -1,7 +1,5 @@
 local walker = require("ast.walker")
 
--- Wraps top-level do...end blocks with an extra control flow layer --
--- making it harder to follow execution order --
 return function(ast)
     local tokens = ast.tokens
     local result = {}
@@ -9,13 +7,17 @@ return function(ast)
 
     while i <= #tokens do
         local tok = tokens[i]
-        -- This will wrap standalone do blocks with repeat...until true --
         if tok.type == "keyword" and tok.value == "do" then
-            table.insert(result, {type="keyword", value="repeat"})
-            table.insert(result, {type="ws", value=" "})
-            table.insert(result, tok)
+            local dvar = "_d" .. tostring(math.random(1000, 9999))
+            local state = math.random(10, 99)
+            local next  = math.random(100, 999)
+
+            table.insert(result, {type="raw", value=
+                "local "..dvar.."="..tostring(state)..
+                ";while "..dvar.."~=0 do if "..dvar.."=="..tostring(state).." then "..dvar.."="..tostring(next)..";"
+            })
             i = i + 1
-            -- And This will find Matching end --
+
             local depth = 1
             while i <= #tokens and depth > 0 do
                 local t = tokens[i]
@@ -24,11 +26,9 @@ return function(ast)
                 elseif t.type == "keyword" and t.value == "end" then
                     depth = depth - 1
                     if depth == 0 then
-                        table.insert(result, t)
-                        table.insert(result, {type="ws", value=" "})
-                        table.insert(result, {type="keyword", value="until"})
-                        table.insert(result, {type="ws", value=" "})
-                        table.insert(result, {type="raw", value="true"})
+                        table.insert(result, {type="raw", value=
+                            ";"..dvar.."=0;elseif "..dvar.."=="..tostring(next).." then "..dvar.."=0;end end"
+                        })
                         i = i + 1
                         break
                     end
