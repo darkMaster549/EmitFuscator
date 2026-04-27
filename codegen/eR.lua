@@ -1,11 +1,11 @@
  
-local aliases  = require("util.aliases")
+local aliases  = require("util.al")
  
-local vmGen    = require("codegen.vm")
+local vmGen    = require("codegen.VH")
  
-local encode   = require("util.encode")
+local encode   = require("util.en")
  
-local deadcode = require("passes.deadcode")
+local deadcode = require("passes.de")
  
 local cfg      = require("config")
  
