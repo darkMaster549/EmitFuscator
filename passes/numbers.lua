@@ -1,43 +1,57 @@
+ 
 local walker = require("ast.walker")
-
-local function shiftNum(n)
-    local t = math.random(1, 4)
+ 
+ 
+local function oNum(n)
+ 
+    n = math.max(1, math.floor(tonumber(n) or 1))
+ 
+    local t = math.random(1, 3)
+ 
     if t == 1 then
-        local s = math.random(1, 50)
-        return string.format("(%d+%d)", n - s, s)
+ 
+        local a = math.random(1, n)
+ 
+        return string.format("(%d+%d)", a, n - a)
+ 
     elseif t == 2 then
-        local s = math.random(1, 50)
-        return string.format("(%d-%d)", n + s, s)
-    elseif t == 3 then
-        local mul = math.random(2, 5)
-        if n % mul == 0 and n > 0 then
-            return string.format("(%d*%d)", n // mul, mul)
-        else
-            local s = math.random(1, 50)
-            return string.format("(%d+%d)", n - s, s)
-        end
+ 
+        local b = math.random(1, 50)
+ 
+        return string.format("(%d-%d)", n + b, b)
+ 
     else
-        -- shift using string.len of a known string
-        local s = math.random(1, 20)
-        local pad = n - s
-        if pad >= 0 then
-            local str = string.rep("x", s)
-            return string.format("(#%q+%d)", str, pad)
-        else
-            local ss = math.random(1, 50)
-            return string.format("(%d+%d)", n - ss, ss)
-        end
+ 
+        local c = math.random(1, 10)
+ 
+        local b = math.random(c+1, c+20)
+ 
+        return string.format("(%d-(%d-%d))", n + (b-c), b, c)
+ 
     end
+ 
 end
-
+ 
+ 
 return function(ast)
+ 
     walker.walk(ast, {
+ 
         number = function(tok)
+ 
             local n = tonumber(tok.value)
+ 
             if n and math.floor(n) == n and n >= 1 and n <= 99999 and not tok.value:find("[xX%.]") then
-                return {type="raw", value=shiftNum(n)}
+ 
+                return {type="raw", value=oNum(n)}
+ 
             end
+ 
         end
+ 
     })
+ 
     return ast
+ 
 end
+ 
